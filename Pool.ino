@@ -22,10 +22,10 @@ UltrasonicPools greenUltrasonic(greenTrigPin, greenEchoPin, "Green");
 UltrasonicPools whiteUltrasonic(whiteTrigPin, whiteEchoPin, "White");
 
 // Led pins
-int redLedPin = 2;
-int yellowLedPin = 3;
-int greenLedPin = 4;
-int whiteLedPin = 5;
+int redLedPin = 10;
+int yellowLedPin = 11;
+int greenLedPin = 12;
+int whiteLedPin = 13;
 
 // Leds
 LedPools redLed(redLedPin);
@@ -52,10 +52,10 @@ void loop() {
   distanceGreen = greenUltrasonic.distanceInCm();
   distanceWhite = whiteUltrasonic.distanceInCm();
 
-  handleLedLight(distanceRed, redLed);
-  handleLedLight(distanceYellow, yellowLed);
-  handleLedLight(distanceGreen, greenLed);
-  handleLedLight(distanceWhite, whiteLed);
+  handleLedLight(distanceRed, &redLed);
+  handleLedLight(distanceYellow, &yellowLed);
+  handleLedLight(distanceGreen, &greenLed);
+  handleLedLight(distanceWhite, &whiteLed);
 
   redUltrasonic.printDistanceInCm(distanceRed);
   yellowUltrasonic.printDistanceInCm(distanceYellow);
@@ -63,10 +63,10 @@ void loop() {
   whiteUltrasonic.printDistanceInCm(distanceWhite);
 }
 
-void handleLedLight(long distance, LedPools led) {
+void handleLedLight(long distance, LedPools* led) {
   if (distance <= CLOSE_DISTANCE_TURN_ON_LED) {
-    led.turnOn();
+    led->turnOn();
   } else {
-    led.turnOff();
+    led->turnOff();
   }
 }
