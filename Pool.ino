@@ -3,8 +3,11 @@
 
 const long CLOSE_DISTANCE_TURN_ON_LED = 15;
 
-// Trig
-uint8_t trigPin = 10;
+// Trigs
+uint8_t redTrigPin = 2;
+uint8_t yellowTrigPin = 3;
+uint8_t greenTrigPin = 4;
+uint8_t whiteTrigPin = 5;
 
 // Echos
 uint8_t redEchoPin = 6;
@@ -13,10 +16,10 @@ uint8_t greenEchoPin = 8;
 uint8_t whiteEchoPin = 9;
 
 // Ultrasonics
-UltrasonicPools redUltrasonic(trigPin, redEchoPin, "Red");
-UltrasonicPools yellowUltrasonic(trigPin, yellowEchoPin, "Yellow");
-UltrasonicPools greenUltrasonic(trigPin, greenEchoPin, "Green");
-UltrasonicPools whiteUltrasonic(trigPin, whiteEchoPin, "White");
+UltrasonicPools redUltrasonic(redTrigPin, redEchoPin, "Red");
+UltrasonicPools yellowUltrasonic(yellowTrigPin, yellowEchoPin, "Yellow");
+UltrasonicPools greenUltrasonic(greenTrigPin, greenEchoPin, "Green");
+UltrasonicPools whiteUltrasonic(whiteTrigPin, whiteEchoPin, "White");
 
 // Led pins
 int redLedPin = 2;
