@@ -1,7 +1,7 @@
 #include <Led_pools.h>
 
-LedPools::LedPools(uint8_t pin) {
-    this->pin = pin;
+LedPools::LedPools(uint8_t pin)
+    : pin(pin) {
 }
 
 void LedPools::begin() {

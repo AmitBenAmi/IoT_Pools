@@ -9,7 +9,6 @@
 class UltrasonicPools {
     public:
         UltrasonicPools(uint8_t trigPin, uint8_t echoPin, char* color);
-        void begin();
         long distanceInCm();
         void printDistanceInCm(long distance);
 
