@@ -49,20 +49,20 @@ void loop() {
   // put your main code here, to run repeatedly:
   long distanceRed, distanceYellow, distanceGreen, distanceWhite;
   
-  distanceRed = redUltrasonic.getDistanceInCm();
-  distanceYellow = yellowUltrasonic.getDistanceInCm();
-  distanceGreen = greenUltrasonic.getDistanceInCm();
-  distanceWhite = whiteUltrasonic.getDistanceInCm();
+  distanceRed = redUltrasonic.distanceInCm();
+  distanceYellow = yellowUltrasonic.distanceInCm();
+  distanceGreen = greenUltrasonic.distanceInCm();
+  distanceWhite = whiteUltrasonic.distanceInCm();
 
   handleLedLight(distanceRed, redLed);
   handleLedLight(distanceYellow, yellowLed);
   handleLedLight(distanceGreen, greenLed);
   handleLedLight(distanceWhite, whiteLed);
 
-  redUltrasonic.distanceInCm(distanceRed);
-  yellowUltrasonic.distanceInCm(distanceYellow);
-  greenUltrasonic.distanceInCm(distanceGreen);
-  whiteUltrasonic.distanceInCm(distanceWhite);
+  redUltrasonic.printDistanceInCm(distanceRed);
+  yellowUltrasonic.printDistanceInCm(distanceYellow);
+  greenUltrasonic.printDistanceInCm(distanceGreen);
+  whiteUltrasonic.printDistanceInCm(distanceWhite);
 }
 
 void handleLedLight(long distance, LedPools led) {
