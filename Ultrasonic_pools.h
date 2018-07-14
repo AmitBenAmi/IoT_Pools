@@ -17,4 +17,4 @@ class UltrasonicPools {
         uint8_t echoPin;
         char* color;
         NewPing sonar;
-}
+};

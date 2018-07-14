@@ -7,4 +7,4 @@ class LedPools {
 
     private:
         uint8_t pin;
-}
+};
