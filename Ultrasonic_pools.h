@@ -4,8 +4,9 @@
 #include <NewPing.h>
 #endif
 
-#ifndef ULTRASONIC_POOLS_H
-#define ULTRASONIC_POOLS_H
+#ifndef Ultrasonic_pools_h
+#define Ultrasonic_pools_h
+#endif
 
 // Sonar/Ping parameters
 #ifndef DELAY_BETWEEN_SONAR_PINGS

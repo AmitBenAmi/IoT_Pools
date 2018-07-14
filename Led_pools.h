@@ -4,8 +4,9 @@
 #include <Arduino.h>
 #endif
 
-#ifndef LED_POOLS_H
-#define LED_POOLS_H
+#ifndef Led_pools_H
+#define Led_pools_H
+#endif
 
 class LedPools {
     public:
