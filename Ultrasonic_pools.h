@@ -1,5 +1,11 @@
 #include <stdint.h>
+
+#ifndef NewPing_h
 #include <NewPing.h>
+#endif
+
+#ifndef ULTRASONIC_POOLS_H
+#define ULTRASONIC_POOLS_H
 
 // Sonar/Ping parameters
 #ifndef DELAY_BETWEEN_SONAR_PINGS
