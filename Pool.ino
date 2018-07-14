@@ -59,10 +59,10 @@ void loop() {
   handleLedLight(distanceGreen, greenLed);
   handleLedLight(distanceWhite, whiteLed);
 
-  redUltrasonic.printDistanceInCm(distanceRed);
-  yellowUltrasonic.printDistanceInCm(distanceYellow);
-  greenUltrasonic.printDistanceInCm(distanceGreen);
-  whiteUltrasonic.printDistanceInCm(distanceWhite);
+  redUltrasonic.distanceInCm(distanceRed);
+  yellowUltrasonic.distanceInCm(distanceYellow);
+  greenUltrasonic.distanceInCm(distanceGreen);
+  whiteUltrasonic.distanceInCm(distanceWhite);
 }
 
 void handleLedLight(long distance, LedPools led) {
