@@ -1,3 +1,6 @@
+#include <stdint.h>
+#include <Arduino.h>
+
 class LedPools {
     public:
         LedPools(uint8_t pin);

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <NewPing.h>
 
 // Sonar/Ping parameters
