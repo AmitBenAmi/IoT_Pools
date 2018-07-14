@@ -15,7 +15,7 @@ long UltrasonicPools::distanceInCm() {
     return this->sonar->ping_cm();
 }
 
-void UltrasonicPools::printDistanceInCm(distance) {
+void UltrasonicPools::printDistanceInCm(long distance) {
     Serial.print("Distance ");
     Serial.print(this->color);
     Serial.print(" is: ");
