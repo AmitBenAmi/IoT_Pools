@@ -28,7 +28,7 @@ class Alert{
 
   private:
 		bool isPowerOn = true;
-		bool isNotificationOn = true;
+		bool isNotificationOn = false;
 
 };
 
@@ -41,6 +41,7 @@ void Alert::begin(){
  Wire.begin(D1, D2);
  Blynk.begin(auth, ssid, pass);
  Blynk.virtualWrite(V1,1);
+ Blynk.virtualWrite(V0,0);
 }
 
 char Alert::requestFromArduino(int numOfDevice, int lengthData){
@@ -48,8 +49,7 @@ char Alert::requestFromArduino(int numOfDevice, int lengthData){
   int len = sizeof(readString)/sizeof(char) - 1;
   Wire.requestFrom(numOfDevice,lengthData);
   while(Wire.available()) {
-    char c = Wire.read(); 
-	readString = c;
+    readString = Wire.read(); 
   }
   return readString;
 }
@@ -86,14 +86,10 @@ void Alert::set_NotificationBtnOn(){
 
 
 char* Alert::CodeToMessage(char code){
-	char* message;
-	switch(code) {
-		case POOL:
-				message = "Alert! Someone fell to the pool";
-				break;
-		case DISTANCE:
-				message = "Alert! Someone is near the pool";
-				break;	
+	if(code == POOL) {
+		return "Alert! Someone fell to the pool";
 	}
-	return message;
+	else if (code == DISTANCE) {
+		return "Alert! Someone is near the pool";
+	}
 }

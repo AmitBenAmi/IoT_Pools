@@ -5,11 +5,8 @@
 class ArduinoSide{
   public: 
     ArduinoSide();
-
-  void begin(int numOfDevice);
-//	static char* receiveEvent(int howMany);
-	static void requestEvent();
-	void sendMessage(char message[]);
-		
-};
+    void begin(int numOfDevice);
+	  static void requestEvent();
+	  void sendMessage(char message);
+}; 
 

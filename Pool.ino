@@ -1,7 +1,9 @@
 #include <Led_pools.h>
 #include <Ultrasonic_pools.h>
+#include <ArduinoSide.h>
 
 const long CLOSE_DISTANCE_TURN_ON_LED = 15;
+ArduinoSide Arduino_Side;
 
 // Trigs
 uint8_t redTrigPin = 2;
@@ -36,7 +38,7 @@ LedPools whiteLed(whiteLedPin);
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-
+  Arduino_Side.begin(8);
   redLed.begin();
   yellowLed.begin();
   greenLed.begin();
@@ -66,7 +68,12 @@ void loop() {
 void handleLedLight(long distance, LedPools* led) {
   if (distance <= CLOSE_DISTANCE_TURN_ON_LED) {
     led->turnOn();
+    Serial.println("Amit");
+    Arduino_Side.sendMessage(DISTANCE);
   } else {
     led->turnOff();
+    Serial.println("Danielle");
+    Arduino_Side.sendMessage(NOTHING);
   }
+  delay(50);
 }
