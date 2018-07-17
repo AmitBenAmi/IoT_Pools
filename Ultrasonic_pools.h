@@ -10,7 +10,7 @@
 
 // Sonar/Ping parameters
 #ifndef DELAY_BETWEEN_SONAR_PINGS
-#define DELAY_BETWEEN_SONAR_PINGS 50
+#define DELAY_BETWEEN_SONAR_PINGS 35
 #endif
 
 class UltrasonicPools {
