@@ -68,11 +68,9 @@ void loop() {
 void handleLedLight(long distance, LedPools* led) {
   if (distance <= CLOSE_DISTANCE_TURN_ON_LED) {
     led->turnOn();
-    Serial.println("Amit");
     Arduino_Side.sendMessage(DISTANCE);
   } else {
     led->turnOff();
-    Serial.println("Danielle");
     Arduino_Side.sendMessage(NOTHING);
   }
   delay(50);
