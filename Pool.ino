@@ -17,52 +17,46 @@ uint8_t yellowEchoPin = 7;
 uint8_t greenEchoPin = 8;
 uint8_t whiteEchoPin = 9;
 
-// Ultrasonics
-UltrasonicPools redUltrasonic(redTrigPin, redEchoPin, "Red");
-UltrasonicPools yellowUltrasonic(yellowTrigPin, yellowEchoPin, "Yellow");
-UltrasonicPools greenUltrasonic(greenTrigPin, greenEchoPin, "Green");
-UltrasonicPools whiteUltrasonic(whiteTrigPin, whiteEchoPin, "White");
-
 // Led pins
 int redLedPin = 10;
 int yellowLedPin = 11;
 int greenLedPin = 12;
 int whiteLedPin = 13;
 
-// Leds
-LedPools redLed(redLedPin);
-LedPools yellowLed(yellowLedPin);
-LedPools greenLed(greenLedPin);
-LedPools whiteLed(whiteLedPin);
+// Structure for better code
+struct PoolSensor {
+  UltrasonicPools ultrasonic;
+  LedPools led;
+};
+
+PoolSensor sensors[] = {
+  { UltrasonicPools(redTrigPin, redEchoPin, "Red"), LedPools(redLedPin) },
+  { UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow"), LedPools(yellowLedPin) },
+  { UltrasonicPools(greenTrigPin, greenEchoPin, "Green"), LedPools(greenLedPin) },
+  { UltrasonicPools(whiteTrigPin, whiteEchoPin, "White"), LedPools(whiteLedPin) }
+};
+
+int sensorsCount = 0;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Arduino_Side.begin(8);
-  redLed.begin();
-  yellowLed.begin();
-  greenLed.begin();
-  whiteLed.begin();
+
+  sensorsCount = sizeof(sensors)/sizeof(sensors[0]);
+
+  for (int i = 0; i < sensorsCount; i++) {
+    sensors[i].led.begin();
+  }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  long distanceRed, distanceYellow, distanceGreen, distanceWhite;
-  
-  distanceRed = redUltrasonic.distanceInCm();
-  distanceYellow = yellowUltrasonic.distanceInCm();
-  distanceGreen = greenUltrasonic.distanceInCm();
-  distanceWhite = whiteUltrasonic.distanceInCm();
-
-  handleLedLight(distanceRed, &redLed);
-  handleLedLight(distanceYellow, &yellowLed);
-  handleLedLight(distanceGreen, &greenLed);
-  handleLedLight(distanceWhite, &whiteLed);
-
-  redUltrasonic.printDistanceInCm(distanceRed);
-  yellowUltrasonic.printDistanceInCm(distanceYellow);
-  greenUltrasonic.printDistanceInCm(distanceGreen);
-  whiteUltrasonic.printDistanceInCm(distanceWhite);
+  for (int i = 0; i < sensorsCount; i++) {
+    long distance = sensors[i].ultrasonic.distanceInCm();
+    handleLedLight(distance, &sensors[i].led);
+    sensors[i].ultrasonic.printDistanceInCm(distance);
+  }
 }
 
 void handleLedLight(long distance, LedPools* led) {
