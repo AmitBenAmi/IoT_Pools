@@ -73,5 +73,4 @@ void handleLedLight(long distance, LedPools* led) {
     led->turnOff();
     Arduino_Side.sendMessage(NOTHING);
   }
-  delay(50);
 }
