@@ -5,13 +5,13 @@
 const long CLOSE_DISTANCE_TURN_ON_LED = 15;
 ArduinoSide Arduino_Side;
 
-// Trigs
+// Ultrasonic trig pins
 uint8_t redTrigPin = 2;
 uint8_t yellowTrigPin = 3;
 uint8_t greenTrigPin = 4;
 uint8_t whiteTrigPin = 5;
 
-// Echos
+// Ultrasonic echo pins
 uint8_t redEchoPin = 6;
 uint8_t yellowEchoPin = 7;
 uint8_t greenEchoPin = 8;
