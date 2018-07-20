@@ -1,6 +1,11 @@
 #include <Alert.h>
 #include <Vibration_pools.h>
 
+VibrationPools vibrations[] = {
+  { VibrationPools(D6) },
+  { VibrationPools(D7) }
+};
+
 char CurrentArduinoCode;
 char LastArduinoCode;
 Alert Alert;
@@ -53,6 +58,3 @@ BLYNK_WRITE(V0){
 BLYNK_WRITE(V1){
   Alert.set_isPowerOn(param.asInt());
 }
-
-
-
