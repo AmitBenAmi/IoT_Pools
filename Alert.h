@@ -9,8 +9,8 @@
 #include "ConfigCodes.h"
 
 char auth[] = "21eb6f4db2ed43edb67f7bd376454a75";
-char ssid[] = "benami_2.4";//"zror1";
-char pass[] = "0522500251"; //"aabbcc1234";
+char ssid[] = "zror1";
+char pass[] = "aabbcc1234";
 
 class Alert{
 	public: 
@@ -82,6 +82,7 @@ void Alert::set_isNotificationOn(bool value){
 
 void Alert::set_NotificationBtnOn(){
 	Blynk.virtualWrite(V0,1);
+	isNotificationOn = true;
 }
 
 
