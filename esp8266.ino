@@ -1,4 +1,5 @@
 #include <Alert.h>
+#include <Vibration_pools.h>
 
 char CurrentArduinoCode;
 char LastArduinoCode;
