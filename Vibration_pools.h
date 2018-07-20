@@ -16,4 +16,4 @@ class VibrationPools {
     
     private:
         uint8_t pin;
-}
+};
