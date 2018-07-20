@@ -26,16 +26,23 @@ void setup() {
 void loop() {
   Alert.start();
   CurrentArduinoCode = Alert.requestFromArduino(8,1);
-  Serial.print("code:");
-  Serial.println(CurrentArduinoCode);
-  Serial.println(Alert.get_isNotificationOn());
-
+  
   for (int i = 0; i < sensorsCount; i++) {
-    if (vibrations[i].vibration()) {
+    bool vibration = vibrations[i].vibration();
+    Serial.print("Vibration is: ");
+
+    if (vibration) {
+      Serial.println("High");
       CurrentArduinoCode = POOL;
       break;
     }
+    else {
+      Serial.println("Low");
+    }
   }
+
+  Serial.print("code:");
+  Serial.println(CurrentArduinoCode);
 
   //power On
   if (Alert.get_isPowerOn()){
