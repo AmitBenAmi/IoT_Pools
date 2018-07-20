@@ -6,13 +6,21 @@ VibrationPools vibrations[] = {
   { VibrationPools(D7) }
 };
 
+int sensorsCount = 0;
+
 char CurrentArduinoCode;
 char LastArduinoCode;
 Alert Alert;
 
 void setup() {
- Serial.begin(9600);
- Alert.begin();
+  Serial.begin(9600);
+  Alert.begin();
+
+  sensorsCount = sizeof(vibrations)/sizeof(vibrations[0]);
+
+  for (int i = 0; i < sensorsCount; i++) {
+    vibrations[i].begin();
+  }
 }
 
 void loop() {
