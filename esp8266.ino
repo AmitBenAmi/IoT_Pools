@@ -29,6 +29,14 @@ void loop() {
   Serial.print("code:");
   Serial.println(CurrentArduinoCode);
   Serial.println(Alert.get_isNotificationOn());
+
+  for (int i = 0; i < sensorsCount; i++) {
+    if (vibrations[i].vibration()) {
+      CurrentArduinoCode = POOL;
+      break;
+    }
+  }
+
   //power On
   if (Alert.get_isPowerOn()){
     //Notification off 
