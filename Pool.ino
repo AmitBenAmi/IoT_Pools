@@ -63,9 +63,13 @@ void loop() {
 void handleLedLight(long distance, LedPools* led, char* ubidotsId) {
   if (distance <= CLOSE_DISTANCE_TURN_ON_LED) {
     led->turnOn();
-    Arduino_Side.sendMessage(((String)DISTANCE + DELIMITER + ubidotsId + DELIMITER + distance + DELIMITER).c_str());
+    Arduino_Side.sendMessage(createMessageForArduinoSide(DISTANCE, ubidotsId, distance));
   } else {
     led->turnOff();
-    Arduino_Side.sendMessage(((String)NOTHING + DELIMITER + ubidotsId + DELIMITER + distance + DELIMITER).c_str());
+    Arduino_Side.sendMessage(createMessageForArduinoSide(NOTHING, ubidotsId, distance));
   }
+}
+
+char* createMessageForArduinoSide(char code, char* ubidotsId, long distance) {
+  return ((String)(code + DELIMITER + ubidotsId + DELIMITER + distance + DELIMITER)).c_str();
 }
