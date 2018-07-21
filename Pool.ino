@@ -1,5 +1,5 @@
 #include <Led_pools.h>
-#include <Ultrasonic_pools.h>
+#include <UltrasonicUbidots.h>
 #include <ArduinoSide.h>
 
 const long CLOSE_DISTANCE_TURN_ON_LED = 15;
@@ -23,17 +23,23 @@ int yellowLedPin = 11;
 int greenLedPin = 12;
 int whiteLedPin = 13;
 
+// Ubidots ultrasonic IDs
+char* redUltrasonicUbidots = "5b533799c03f97583cdeec1d";
+char* yellowUltrasonicUbidots = "5b5337a0c03f9758774e5013";
+char* greenUltrasonicUbidots = "5b5337a8c03f9758774e5017";
+char* whiteUltrasonicUbidots = "5b5337acc03f9758774e5019";
+
 // Structure for better code
 struct PoolSensor {
-  UltrasonicPools ultrasonic;
+  UltrasonicUbidots ultrasonicUbidots;
   LedPools led;
 };
 
 PoolSensor sensors[] = {
-  { UltrasonicPools(redTrigPin, redEchoPin, "Red"), LedPools(redLedPin) },
-  { UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow"), LedPools(yellowLedPin) },
-  { UltrasonicPools(greenTrigPin, greenEchoPin, "Green"), LedPools(greenLedPin) },
-  { UltrasonicPools(whiteTrigPin, whiteEchoPin, "White"), LedPools(whiteLedPin) }
+  { UltrasonicUbidots(redUltrasonicUbidots, UltrasonicPools(redTrigPin, redEchoPin, "Red")), LedPools(redLedPin) },
+  { UltrasonicUbidots(yellowUltrasonicUbidots, UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow")), LedPools(yellowLedPin) },
+  { UltrasonicUbidots(greenUltrasonicUbidots, UltrasonicPools(greenTrigPin, greenEchoPin, "Green")), LedPools(greenLedPin) },
+  { UltrasonicUbidots(whiteUltrasonicUbidots, UltrasonicPools(whiteTrigPin, whiteEchoPin, "White")), LedPools(whiteLedPin) }
 };
 
 int sensorsCount = 0;
@@ -53,9 +59,9 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   for (int i = 0; i < sensorsCount; i++) {
-    long distance = sensors[i].ultrasonic.distanceInCm();
+    long distance = sensors[i].ultrasonicUbidots.getUltrasonicPool().distanceInCm();
     handleLedLight(distance, &sensors[i].led);
-    sensors[i].ultrasonic.printDistanceInCm(distance);
+    sensors[i].ultrasonicUbidots.getUltrasonicPool().printDistanceInCm(distance);
   }
 }
 
