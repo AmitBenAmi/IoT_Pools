@@ -9,15 +9,11 @@
 #include <Wire.h>
 #include "ConfigCodes.h"
 
-char auth[] = "21eb6f4db2ed43edb67f7bd376454a75";
-char ssid[] = "zror1";
-char pass[] = "aabbcc1234";
-
 class Alert{
 	public: 
 		Alert();
 		void begin();
-		char requestFromArduino(int numOfDevice, int lengthData);
+		char* requestFromArduino(int numOfDevice, int lengthData);
 		void start();
 		void sendNotification(char* message);
 		bool getPowerOn();
@@ -42,18 +38,21 @@ Alert::Alert(){
 
 void Alert::begin(){
  Wire.begin(D1, D2);
- Blynk.begin(auth, ssid, pass);
+ Blynk.begin(BLYNK_TOKEN, WIFI_SSID, WIFI_PASS);
  Blynk.virtualWrite(V1,1);
  Blynk.virtualWrite(V0,0);
 }
 
-char Alert::requestFromArduino(int numOfDevice, int lengthData){
-  char readString; 
+char* Alert::requestFromArduino(int numOfDevice, int lengthData){
+  char readString[lengthData + 1]; 
   int len = sizeof(readString)/sizeof(char) - 1;
   Wire.requestFrom(numOfDevice,lengthData);
   while(Wire.available()) {
-    readString = Wire.read(); 
+    readString[len] = Wire.read(); 
+	len++;
   }
+  readString[len] = '\0';
+
   return readString;
 }
 
