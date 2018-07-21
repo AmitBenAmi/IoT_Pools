@@ -1,9 +1,13 @@
 #include <Alert.h>
-#include <Vibration_pools.h>
+#include <VibrationUbidots.h>
 
-VibrationPools vibrations[] = {
-  { VibrationPools(D6) },
-  { VibrationPools(D7) }
+// Ubidots vibration IDs
+char* d6VibrationUbidots = "5b5337c2c03f9758774e5039";
+char* d7VibrationUbidots = "5b5337c8c03f9758774e503c";
+
+VibrationUbidots vibrations[] = {
+  { VibrationUbidots(d6VibrationUbidots, VibrationPools(D6)) },
+  { VibrationUbidots(d7VibrationUbidots, VibrationPools(D7)) }
 };
 
 int sensorsCount = 0;
@@ -19,7 +23,7 @@ void setup() {
   sensorsCount = sizeof(vibrations)/sizeof(vibrations[0]);
 
   for (int i = 0; i < sensorsCount; i++) {
-    vibrations[i].begin();
+    vibrations[i].getVibrationPool().begin();
   }
 }
 
@@ -28,7 +32,7 @@ void loop() {
   CurrentArduinoCode = Alert.requestFromArduino(8,1);
   
   for (int i = 0; i < sensorsCount; i++) {
-    bool vibration = vibrations[i].vibration();
+    bool vibration = vibrations[i].getVibrationPool().vibration();
     Serial.print("Vibration is: ");
 
     if (vibration) {
