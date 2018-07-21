@@ -5,6 +5,7 @@
 #include <BlynkSimpleEsp8266.h>
 #endif
 
+#include <SimpleTimer.h>
 #include <Wire.h>
 #include "ConfigCodes.h"
 
@@ -19,17 +20,19 @@ class Alert{
 		char requestFromArduino(int numOfDevice, int lengthData);
 		void start();
 		void sendNotification(char* message);
-		bool get_isPowerOn();
-		bool get_isNotificationOn();
-		void set_isPowerOn(bool value);
-		void set_isNotificationOn(bool value); 
-		void set_NotificationBtnOn();
+		bool getPowerOn();
+		bool getNotificationOn();
+		void setPowerOn(bool value);
+		void setNotificationOn(bool value); 
+		void setNotificationBtnOn();
+		void setPowerBtnOn();
 		char* CodeToMessage(char code);
 
   private:
 		bool isPowerOn = true;
 		bool isNotificationOn = false;
-
+		SimpleTimer Timer;
+		int TimerID;
 };
 
 #endif
@@ -63,26 +66,31 @@ void Alert::sendNotification(char* message){
 	Blynk.notify(message);
 }
 	
-bool Alert::get_isPowerOn(){
+bool Alert::getPowerOn(){
 	return isPowerOn;
 }
 
-bool Alert::get_isNotificationOn(){
+bool Alert::getNotificationOn(){
 	return isNotificationOn;
 }
 
-void Alert::set_isPowerOn(bool value){
+void Alert::setPowerOn(bool value){
 	isPowerOn = value;
 }	
 	
-void Alert::set_isNotificationOn(bool value){
+void Alert::setNotificationOn(bool value){
 	isNotificationOn = value;
 }
 
 
-void Alert::set_NotificationBtnOn(){
+void Alert::setNotificationBtnOn(){
 	Blynk.virtualWrite(V0,1);
 	isNotificationOn = true;
+}
+
+void Alert::setPowerBtnOn(){
+	Blynk.virtualWrite(V1,1);
+	isPowerOn = true;
 }
 
 
