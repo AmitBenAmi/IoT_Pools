@@ -68,9 +68,9 @@ void loop() {
 void handleLedLight(long distance, LedPools* led, char* ubidotsId) {
   if (distance <= CLOSE_DISTANCE_TURN_ON_LED) {
     led->turnOn();
-    Arduino_Side.sendMessage((String)DISTANCE + ubidotsId);
+    Arduino_Side.sendMessage(((String)DISTANCE + ubidotsId).c_str());
   } else {
     led->turnOff();
-    Arduino_Side.sendMessage((String)NOTHING + ubidotsId);
+    Arduino_Side.sendMessage(((String)NOTHING + ubidotsId).c_str());
   }
 }
