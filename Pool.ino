@@ -42,7 +42,7 @@ int sensorsCount = 0;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  Arduino_Side.begin(8);
+  Arduino_Side.begin(ARDUINO_ESP8266_COMMUNICATION_ID);
 
   sensorsCount = sizeof(sensors)/sizeof(sensors[0]);
 
@@ -63,9 +63,9 @@ void loop() {
 void handleLedLight(long distance, LedPools* led, char* ubidotsId) {
   if (distance <= CLOSE_DISTANCE_TURN_ON_LED) {
     led->turnOn();
-    Arduino_Side.sendMessage(((String)DISTANCE + DELIMITER + ubidotsId).c_str());
+    Arduino_Side.sendMessage(((String)DISTANCE + DELIMITER + ubidotsId + DELIMITER + distance + DELIMITER).c_str());
   } else {
     led->turnOff();
-    Arduino_Side.sendMessage(((String)NOTHING + DELIMITER + ubidotsId).c_str());
+    Arduino_Side.sendMessage(((String)NOTHING + DELIMITER + ubidotsId + DELIMITER + distance + DELIMITER).c_str());
   }
 }
