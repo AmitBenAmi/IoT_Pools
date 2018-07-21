@@ -15,6 +15,7 @@ static void ArduinoSide::requestEvent(){
   }
 
   
- void ArduinoSide::sendMessage(char message){
-	outMessage = message;
+ void ArduinoSide::sendMessage(char* message){
+	//outMessage = message;
+  strcpy(outMessage,message);
  }

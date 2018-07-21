@@ -7,6 +7,6 @@ class ArduinoSide{
     ArduinoSide();
     void begin(int numOfDevice);
 	  static void requestEvent();
-	  void sendMessage(char message);
+	  void sendMessage(char* message);
 }; 
 
