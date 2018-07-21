@@ -24,12 +24,6 @@ int yellowLedPin = 11;
 int greenLedPin = 12;
 int whiteLedPin = 13;
 
-// Ubidots ultrasonic IDs
-char* redUltrasonicUbidots = "5b533799c03f97583cdeec1d";
-char* yellowUltrasonicUbidots = "5b5337a0c03f9758774e5013";
-char* greenUltrasonicUbidots = "5b5337a8c03f9758774e5017";
-char* whiteUltrasonicUbidots = "5b5337acc03f9758774e5019";
-
 // Structure for better code
 struct PoolSensor {
   UltrasonicUbidots ultrasonicUbidots;
@@ -37,10 +31,10 @@ struct PoolSensor {
 };
 
 PoolSensor sensors[] = {
-  { UltrasonicUbidots(redUltrasonicUbidots, UltrasonicPools(redTrigPin, redEchoPin, "Red")), LedPools(redLedPin) },
-  { UltrasonicUbidots(yellowUltrasonicUbidots, UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow")), LedPools(yellowLedPin) },
-  { UltrasonicUbidots(greenUltrasonicUbidots, UltrasonicPools(greenTrigPin, greenEchoPin, "Green")), LedPools(greenLedPin) },
-  { UltrasonicUbidots(whiteUltrasonicUbidots, UltrasonicPools(whiteTrigPin, whiteEchoPin, "White")), LedPools(whiteLedPin) }
+  { UltrasonicUbidots(RED_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(redTrigPin, redEchoPin, "Red")), LedPools(redLedPin) },
+  { UltrasonicUbidots(YELLOW_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow")), LedPools(yellowLedPin) },
+  { UltrasonicUbidots(GREEN_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(greenTrigPin, greenEchoPin, "Green")), LedPools(greenLedPin) },
+  { UltrasonicUbidots(WHITE_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(whiteTrigPin, whiteEchoPin, "White")), LedPools(whiteLedPin) }
 };
 
 int sensorsCount = 0;
