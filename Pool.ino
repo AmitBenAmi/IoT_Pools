@@ -2,26 +2,29 @@
 #include <UltrasonicUbidots.h>
 #include <ArduinoSide.h>
 #include <ConfigCodes.h>
+#include <string.h>
+#include <Wire.h>
+#include <string.h>
 
 const long CLOSE_DISTANCE_TURN_ON_LED = 15;
 ArduinoSide Arduino_Side;
 
 // Ultrasonic trig pins
-uint8_t redTrigPin = 2;
-uint8_t yellowTrigPin = 3;
-uint8_t greenTrigPin = 4;
-uint8_t whiteTrigPin = 5;
+uint8_t redTrigPin = 5;
+uint8_t yellowTrigPin = 8;
+uint8_t greenTrigPin = 2;
+uint8_t whiteTrigPin = 11;
 
 // Ultrasonic echo pins
 uint8_t redEchoPin = 6;
-uint8_t yellowEchoPin = 7;
-uint8_t greenEchoPin = 8;
-uint8_t whiteEchoPin = 9;
+uint8_t yellowEchoPin = 9;
+uint8_t greenEchoPin = 3;
+uint8_t whiteEchoPin = 12;
 
 // Led pins
-int redLedPin = 10;
-int yellowLedPin = 11;
-int greenLedPin = 12;
+int redLedPin = 7;
+int yellowLedPin = 10;
+int greenLedPin = 4;
 int whiteLedPin = 13;
 
 // Structure for better code
@@ -56,20 +59,26 @@ void loop() {
   for (int i = 0; i < sensorsCount; i++) {
     long distance = sensors[i].ultrasonicUbidots.getUltrasonicPool().distanceInCm();
     handleLedLight(distance, &sensors[i].led, sensors[i].ultrasonicUbidots.getID());
-    sensors[i].ultrasonicUbidots.getUltrasonicPool().printDistanceInCm(distance);
+//    sensors[i].ultrasonicUbidots.getUltrasonicPool().printDistanceInCm(distance);
   }
 }
 
 void handleLedLight(long distance, LedPools* led, char* ubidotsId) {
-  String message = (String)DELIMITER + (String)ubidotsId + (String)DELIMITER + (String)distance + (String)DELIMITER;
-  
+  char code;
+
   if (distance <= CLOSE_DISTANCE_TURN_ON_LED) {
     led->turnOn();    
-    message = (String)DISTANCE + message;
-    Arduino_Side.sendMessage(message.c_str());
+    code = DISTANCE;
   } else {
     led->turnOff();
-    message = (String)NOTHING + message;
-    Arduino_Side.sendMessage(message.c_str());
+    code = NOTHING;
   }
+  
+  String message = (String)code + (String)DELIMITER + (String)ubidotsId + (String)DELIMITER + (String)distance + (String)DELIMITER;
+  Arduino_Side.sendMessage(message.c_str());
+//Arduino_Side.sendMessage(code);
+//Serial.println(code);
 }
+
+
+
