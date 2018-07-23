@@ -2,9 +2,6 @@
 #include <UltrasonicUbidots.h>
 #include <ArduinoSide.h>
 #include <ConfigCodes.h>
-#include <string.h>
-#include <Wire.h>
-#include <string.h>
 
 const long CLOSE_DISTANCE_TURN_ON_LED = 15;
 ArduinoSide Arduino_Side;
@@ -76,8 +73,6 @@ void handleLedLight(long distance, LedPools* led, char* ubidotsId) {
   
   String message = (String)code + (String)DELIMITER + (String)ubidotsId + (String)DELIMITER + (String)distance + (String)DELIMITER;
   Arduino_Side.sendMessage(message.c_str());
-//Arduino_Side.sendMessage(code);
-//Serial.println(code);
 }
 
 
