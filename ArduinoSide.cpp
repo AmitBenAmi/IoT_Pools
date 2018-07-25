@@ -12,12 +12,7 @@ void ArduinoSide::begin(int numOfDevice){
 }
 
 static void ArduinoSide::requestEvent(){
-Serial.println("llll");
-  Serial.println(outMessage);
-  Serial.println("ll22");
-  Wire.write("2_5b5337acc03f9758774e5019_8_");
-  Serial.println("l33l");
-  
+  Wire.write(outMessage);
 }
 
   

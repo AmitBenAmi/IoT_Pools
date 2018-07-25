@@ -1,5 +1,6 @@
 #include <Alert.h>
 #include <VibrationUbidots.h>
+#include <UbidotsMicroESP8266.h>
 
 // Ubidots vibration IDs
 char* d6VibrationUbidots = "5b5337c2c03f9758774e5039";
@@ -12,14 +13,19 @@ VibrationUbidots vibrations[] = {
 
 int sensorsCount = 0;
 
+char* dataFromArduino = "";
 char CurrentArduinoCode;
+char* sensorVariableId;
+int distance;
 char LastArduinoCode;
 Alert Alert;
+
+Ubidots client(UBIDOTS_TOKEN);
 
 void setup() {
   Serial.begin(9600);
   Alert.begin();
-
+  client.wifiConnection(WIFI_SSID,WIFI_PASS);
   sensorsCount = sizeof(vibrations)/sizeof(vibrations[0]);
 
   for (int i = 0; i < sensorsCount; i++) {
@@ -29,59 +35,59 @@ void setup() {
 
 void loop() {
   Alert.start();
-  CurrentArduinoCode = Alert.requestFromArduino(8,1);
+  strcpy(dataFromArduino, Alert.requestFromArduino(8, ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH));
+  CurrentArduinoCode = strtok(dataFromArduino, "_")[0];
+  sensorVariableId = strtok(NULL, "_");
+  distance = atoi(strtok(NULL, "_"));
+
+  Serial.print("Code: ");
+  Serial.print(CurrentArduinoCode);
+  Serial.print(", ID: ");
+  Serial.print(sensorVariableId);
+  Serial.print(", Distance: ");
+  Serial.println(distance);
+
+  client.add(sensorVariableId,distance);
   
+  client.sendAll();
   for (int i = 0; i < sensorsCount; i++) {
     bool vibration = vibrations[i].getVibrationPool().vibration();
-    Serial.print("Vibration is: ");
+//    Serial.print("Vibration is: ");
 
     if (vibration) {
-      Serial.println("High");
+//      Serial.println("High");
       CurrentArduinoCode = POOL;
       break;
     }
     else {
-      Serial.println("Low");
+//      Serial.println("Low");
     }
   }
 
-  Serial.print("code:");
-  Serial.println(CurrentArduinoCode);
-
   //power On
-  if (Alert.get_isPowerOn()){
-    //Notification off 
-    if(!Alert.get_isNotificationOn()){
+  if (Alert.getPowerOn()){
+    if(!Alert.getNotificationOn()){
       if (CurrentArduinoCode != NOTHING) {
         Alert.sendNotification(Alert.CodeToMessage(CurrentArduinoCode));
-        Alert.set_NotificationBtnOn();
+        Alert.setNotificationBtnOn();
         LastArduinoCode = CurrentArduinoCode;
-        Serial.print("last:");
-        Serial.println(LastArduinoCode);
       }
-    } else //notification on (allready send a message)
+    } else 
     {
-      Serial.println("notification ON");
-      // if new message is pool alert, chang the message. if not, continue send the last message
       if(CurrentArduinoCode == POOL){
-        Serial.println(Alert.CodeToMessage(CurrentArduinoCode));
         Alert.sendNotification(Alert.CodeToMessage(CurrentArduinoCode));
-      } else {
-        Serial.print("last:");
-        Serial.println(LastArduinoCode);
-        Serial.println(Alert.CodeToMessage(LastArduinoCode));
+        LastArduinoCode = CurrentArduinoCode;
+      }
         Alert.sendNotification(Alert.CodeToMessage(LastArduinoCode));
       }
     }
   }
-}
 
 
 BLYNK_WRITE(V0){
-  Serial.println("hello");
-  Alert.set_isNotificationOn(param.asInt());
+  Alert.setNotificationOn(param.asInt());
 }
 
 BLYNK_WRITE(V1){
-  Alert.set_isPowerOn(param.asInt());
+  Alert.setPowerOn(param.asInt());
 }

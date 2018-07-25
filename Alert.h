@@ -5,7 +5,6 @@
 #include <BlynkSimpleEsp8266.h>
 #endif
 
-#include <SimpleTimer.h>
 #include <Wire.h>
 #include "ConfigCodes.h"
 
@@ -45,7 +44,7 @@ void Alert::begin(){
 
 char* Alert::requestFromArduino(int numOfDevice, int lengthData){
   char readString[lengthData + 1]; 
-  int len = sizeof(readString)/sizeof(char) - 1;
+  int len = 0;
   Wire.requestFrom(numOfDevice,lengthData);
   while(Wire.available()) {
     readString[len] = Wire.read(); 

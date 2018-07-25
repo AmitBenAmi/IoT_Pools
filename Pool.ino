@@ -3,7 +3,6 @@
 #include <ArduinoSide.h>
 #include <ConfigCodes.h>
 
-const long CLOSE_DISTANCE_TURN_ON_LED = 15;
 ArduinoSide Arduino_Side;
 
 // Ultrasonic trig pins
@@ -31,9 +30,9 @@ struct PoolSensor {
 };
 
 PoolSensor sensors[] = {
-  { UltrasonicUbidots(RED_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(redTrigPin, redEchoPin, "Red")), LedPools(redLedPin) },
-  { UltrasonicUbidots(YELLOW_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow")), LedPools(yellowLedPin) },
-  { UltrasonicUbidots(GREEN_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(greenTrigPin, greenEchoPin, "Green")), LedPools(greenLedPin) },
+//  { UltrasonicUbidots(RED_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(redTrigPin, redEchoPin, "Red")), LedPools(redLedPin) },
+//  { UltrasonicUbidots(YELLOW_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow")), LedPools(yellowLedPin) },
+//  { UltrasonicUbidots(GREEN_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(greenTrigPin, greenEchoPin, "Green")), LedPools(greenLedPin) },
   { UltrasonicUbidots(WHITE_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(whiteTrigPin, whiteEchoPin, "White")), LedPools(whiteLedPin) }
 };
 
@@ -56,7 +55,7 @@ void loop() {
   for (int i = 0; i < sensorsCount; i++) {
     long distance = sensors[i].ultrasonicUbidots.getUltrasonicPool().distanceInCm();
     handleLedLight(distance, &sensors[i].led, sensors[i].ultrasonicUbidots.getID());
-//    sensors[i].ultrasonicUbidots.getUltrasonicPool().printDistanceInCm(distance);
+    sensors[i].ultrasonicUbidots.getUltrasonicPool().printDistanceInCm(distance);
   }
 }
 
@@ -74,6 +73,3 @@ void handleLedLight(long distance, LedPools* led, char* ubidotsId) {
   String message = (String)code + (String)DELIMITER + (String)ubidotsId + (String)DELIMITER + (String)distance + (String)DELIMITER;
   Arduino_Side.sendMessage(message.c_str());
 }
-
-
-
