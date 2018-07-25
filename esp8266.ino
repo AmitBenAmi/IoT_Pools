@@ -13,10 +13,10 @@ VibrationUbidots vibrations[] = {
 
 int sensorsCount = 0;
 
-char* dataFromArduino = "";
+char dataFromArduino[ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH];
 char CurrentArduinoCode;
 char* sensorVariableId;
-int distance;
+float distance;
 char LastArduinoCode;
 Alert Alert;
 
@@ -35,10 +35,10 @@ void setup() {
 
 void loop() {
   Alert.start();
-  strcpy(dataFromArduino, Alert.requestFromArduino(8, ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH));
+  Alert.requestFromArduino(8, ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH).toCharArray(dataFromArduino, ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH);
   CurrentArduinoCode = strtok(dataFromArduino, "_")[0];
   sensorVariableId = strtok(NULL, "_");
-  distance = atoi(strtok(NULL, "_"));
+  distance = (float)atoi(strtok(NULL, "_"));
 
   Serial.print("Code: ");
   Serial.print(CurrentArduinoCode);
@@ -47,20 +47,22 @@ void loop() {
   Serial.print(", Distance: ");
   Serial.println(distance);
 
-  client.add(sensorVariableId,distance);
+  client.add(sensorVariableId, distance);
+  client.sendAll(false);
+
   
-  client.sendAll();
+  Serial.println();
   for (int i = 0; i < sensorsCount; i++) {
     bool vibration = vibrations[i].getVibrationPool().vibration();
-//    Serial.print("Vibration is: ");
+    Serial.print("Vibration is: ");
 
     if (vibration) {
-//      Serial.println("High");
+      Serial.println("High");
       CurrentArduinoCode = POOL;
       break;
     }
     else {
-//      Serial.println("Low");
+      Serial.println("Low");
     }
   }
 

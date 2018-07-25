@@ -12,7 +12,7 @@ class Alert{
 	public: 
 		Alert();
 		void begin();
-		char* requestFromArduino(int numOfDevice, int lengthData);
+		String requestFromArduino(int numOfDevice, int lengthData);
 		void start();
 		void sendNotification(char* message);
 		bool getPowerOn();
@@ -26,8 +26,6 @@ class Alert{
   private:
 		bool isPowerOn = true;
 		bool isNotificationOn = false;
-		SimpleTimer Timer;
-		int TimerID;
 };
 
 #endif
@@ -42,7 +40,7 @@ void Alert::begin(){
  Blynk.virtualWrite(V0,0);
 }
 
-char* Alert::requestFromArduino(int numOfDevice, int lengthData){
+String Alert::requestFromArduino(int numOfDevice, int lengthData){
   char readString[lengthData + 1]; 
   int len = 0;
   Wire.requestFrom(numOfDevice,lengthData);
@@ -52,7 +50,7 @@ char* Alert::requestFromArduino(int numOfDevice, int lengthData){
   }
   readString[len] = '\0';
 
-  return readString;
+  return (String)readString;
 }
 
 void Alert::start(){
