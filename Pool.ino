@@ -30,9 +30,9 @@ struct PoolSensor {
 };
 
 PoolSensor sensors[] = {
-//  { UltrasonicUbidots(RED_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(redTrigPin, redEchoPin, "Red")), LedPools(redLedPin) },
-//  { UltrasonicUbidots(YELLOW_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow")), LedPools(yellowLedPin) },
-//  { UltrasonicUbidots(GREEN_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(greenTrigPin, greenEchoPin, "Green")), LedPools(greenLedPin) },
+  { UltrasonicUbidots(RED_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(redTrigPin, redEchoPin, "Red")), LedPools(redLedPin) },
+  { UltrasonicUbidots(YELLOW_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(yellowTrigPin, yellowEchoPin, "Yellow")), LedPools(yellowLedPin) },
+  { UltrasonicUbidots(GREEN_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(greenTrigPin, greenEchoPin, "Green")), LedPools(greenLedPin) },
   { UltrasonicUbidots(WHITE_ULTRASONIC_UBIDOTS_VARIABLE_ID, UltrasonicPools(whiteTrigPin, whiteEchoPin, "White")), LedPools(whiteLedPin) }
 };
 
