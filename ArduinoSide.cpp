@@ -1,5 +1,6 @@
 #include "ArduinoSide.h"
-char outMessage[32] = "0";
+#include "ConfigCodes.h"
+char outMessage[ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH] = "0";
 
 #include "Arduino.h"
 

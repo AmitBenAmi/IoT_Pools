@@ -2,21 +2,15 @@
 #include <VibrationUbidots.h>
 #include <UbidotsMicroESP8266.h>
 
-// Ubidots vibration IDs
-char* d6VibrationUbidots = "5b5337c2c03f9758774e5039";
-char* d7VibrationUbidots = "5b5337c8c03f9758774e503c";
-
 VibrationUbidots vibrations[] = {
-  { VibrationUbidots(d6VibrationUbidots, VibrationPools(D6)) },
-  { VibrationUbidots(d7VibrationUbidots, VibrationPools(D7)) }
+  { VibrationUbidots(D6_VIBRATION_UBIDOTS_VARIABLE_ID, VibrationPools(D6)) },
+  { VibrationUbidots(D7_VIBRATION_UBIDOTS_VARIABLE_ID, VibrationPools(D7)) }
 };
 
 int sensorsCount = 0;
 
 char dataFromArduino[ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH];
-char CurrentArduinoCode;
-char* sensorVariableId;
-float distance;
+char CurrentArduinoCode = NOTHING;
 char LastArduinoCode;
 Alert Alert;
 
@@ -35,61 +29,94 @@ void setup() {
 
 void loop() {
   Alert.start();
-  Alert.requestFromArduino(8, ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH).toCharArray(dataFromArduino, ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH);
-  CurrentArduinoCode = strtok(dataFromArduino, "_")[0];
-  sensorVariableId = strtok(NULL, "_");
-  distance = (float)atoi(strtok(NULL, "_"));
+  Alert.requestFromArduino(ARDUINO_ESP8266_COMMUNICATION_ID, ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH).toCharArray(dataFromArduino, ARDUINO_ESP8266_COMMUNICATION_REQUEST_LENGTH);
 
-  Serial.print("Code: ");
-  Serial.print(CurrentArduinoCode);
-  Serial.print(", ID: ");
-  Serial.print(sensorVariableId);
-  Serial.print(", Distance: ");
-  Serial.println(distance);
+  Serial.println(dataFromArduino);
 
-  client.add(sensorVariableId, distance);
-  client.sendAll(false);
-
+  if (strlen(dataFromArduino) == 0) {
+    Serial.println("No data from arduino");
+  } else {
+    char code = strtok(dataFromArduino, "_")[0];
+    char * sensorVariableId;
   
-  Serial.println();
-  for (int i = 0; i < sensorsCount; i++) {
-    bool vibration = vibrations[i].getVibrationPool().vibration();
-    Serial.print("Vibration is: ");
+    for (int i = 0; i < 4; i++) {
+  
+      if (CurrentArduinoCode == NOTHING) {
+        CurrentArduinoCode = code;
+      }
+      
+      sensorVariableId = strtok(NULL, "_");
+      float distance = (float)atoi(strtok(NULL, "_"));
+  
+      Serial.print("Code: ");
+      Serial.print(code);
+      Serial.print(", ID: ");
+      Serial.print(sensorVariableId);
+      Serial.print(", Distance: ");
+      Serial.println(distance);
+  
+      client.add(sensorVariableId, distance);
+  
+      code = strtok(NULL, "_")[0];
+    }
+  
+    Serial.println("Read all arduino data");
+    client.sendAll(false);
+  
+    for (int i = 0; i < sensorsCount; i++) {
+      bool vibration = vibrations[i].getVibrationPool().vibration();
+      Serial.print("Vibration is: ");
+  
+      if (vibration) {
+        Serial.println("High");
+        CurrentArduinoCode = POOL;
+      }
+      else {
+        Serial.println("Low");
+      }
+  
+      client.add(vibrations[i].getID(), (float)vibration);
+    }
+  
+    client.sendAll(false);
 
-    if (vibration) {
-      Serial.println("High");
-      CurrentArduinoCode = POOL;
-      break;
-    }
-    else {
-      Serial.println("Low");
-    }
+    Serial.print("CurrentArduinoCode: ");
+    Serial.println(CurrentArduinoCode);
+  
+    //power On
+    if (Alert.getPowerOn()){
+      if(!Alert.getNotificationOn()){
+        if (CurrentArduinoCode != NOTHING) {
+          Alert.sendNotification(Alert.CodeToMessage(CurrentArduinoCode));
+          Alert.setNotificationBtnOn();
+          LastArduinoCode = CurrentArduinoCode;
+        }
+      } else {
+        if(CurrentArduinoCode == POOL){
+          LastArduinoCode = CurrentArduinoCode;
+        }
+
+        if (LastArduinoCode != NOTHING) {
+          Alert.sendNotification(Alert.CodeToMessage(LastArduinoCode)); 
+        }
+      }
+    } 
   }
-
-  //power On
-  if (Alert.getPowerOn()){
-    if(!Alert.getNotificationOn()){
-      if (CurrentArduinoCode != NOTHING) {
-        Alert.sendNotification(Alert.CodeToMessage(CurrentArduinoCode));
-        Alert.setNotificationBtnOn();
-        LastArduinoCode = CurrentArduinoCode;
-      }
-    } else 
-    {
-      if(CurrentArduinoCode == POOL){
-        Alert.sendNotification(Alert.CodeToMessage(CurrentArduinoCode));
-        LastArduinoCode = CurrentArduinoCode;
-      }
-        Alert.sendNotification(Alert.CodeToMessage(LastArduinoCode));
-      }
-    }
-  }
-
+}
 
 BLYNK_WRITE(V0){
   Alert.setNotificationOn(param.asInt());
+  CurrentArduinoCode = NOTHING;
+  LastArduinoCode = CurrentArduinoCode;
 }
 
 BLYNK_WRITE(V1){
-  Alert.setPowerOn(param.asInt());
+  bool value = param.asInt();
+  Alert.setPowerOn(value);
+  CurrentArduinoCode = NOTHING;
+  LastArduinoCode = CurrentArduinoCode;
+
+  if (!value) {
+    Alert.setNotificationBtnOff();
+  }
 }

@@ -20,6 +20,7 @@ class Alert{
 		void setPowerOn(bool value);
 		void setNotificationOn(bool value); 
 		void setNotificationBtnOn();
+		void setNotificationBtnOff();
 		void setPowerBtnOn();
 		char* CodeToMessage(char code);
 
@@ -45,11 +46,11 @@ String Alert::requestFromArduino(int numOfDevice, int lengthData){
   int len = 0;
   Wire.requestFrom(numOfDevice,lengthData);
   while(Wire.available()) {
-    readString[len] = Wire.read(); 
+	readString[len] = Wire.read();
 	len++;
   }
   readString[len] = '\0';
-
+	
   return (String)readString;
 }
 
@@ -82,6 +83,11 @@ void Alert::setNotificationOn(bool value){
 void Alert::setNotificationBtnOn(){
 	Blynk.virtualWrite(V0,1);
 	isNotificationOn = true;
+}
+
+void Alert::setNotificationBtnOff(){
+	Blynk.virtualWrite(V0,0);
+	isNotificationOn = false;
 }
 
 void Alert::setPowerBtnOn(){

@@ -52,14 +52,24 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  String message = "";
+  
   for (int i = 0; i < sensorsCount; i++) {
     long distance = sensors[i].ultrasonicUbidots.getUltrasonicPool().distanceInCm();
-    handleLedLight(distance, &sensors[i].led, sensors[i].ultrasonicUbidots.getID());
+    char code = handleLedLight(distance, &sensors[i].led);
     sensors[i].ultrasonicUbidots.getUltrasonicPool().printDistanceInCm(distance);
+    message += 
+      (String)code + (String)DELIMITER + 
+      (String)sensors[i].ultrasonicUbidots.getID() + (String)DELIMITER + 
+      (String)distance + (String)DELIMITER;
   }
+
+  message += (String)DELIMITER;
+  
+  Arduino_Side.sendMessage(message.c_str());
 }
 
-void handleLedLight(long distance, LedPools* led, char* ubidotsId) {
+char handleLedLight(long distance, LedPools* led) {
   char code;
 
   if (distance <= CLOSE_DISTANCE_TURN_ON_LED) {
@@ -69,7 +79,6 @@ void handleLedLight(long distance, LedPools* led, char* ubidotsId) {
     led->turnOff();
     code = NOTHING;
   }
-  
-  String message = (String)code + (String)DELIMITER + (String)ubidotsId + (String)DELIMITER + (String)distance + (String)DELIMITER;
-  Arduino_Side.sendMessage(message.c_str());
+
+  return code;
 }
